@@ -24,6 +24,6 @@ export default app({
     route("LandingRoute", "/", page(LandingPage)),
     route("BookRoute", "/book", page(BookAppointmentPage)),
     route("LoginRoute", "/login", page(LoginPage)),
-    route("DashboardRoute", "/dashboard", page(DashboardPage), { authRequired: true }),
+    route("DashboardRoute", "/dashboard", page(DashboardPage, { authRequired: true })),
   ],
 });
