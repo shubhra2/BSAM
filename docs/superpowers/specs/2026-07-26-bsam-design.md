@@ -287,7 +287,7 @@ Barbers log in with the same `/login` page but see a filtered dashboard:
 | Query | Input | Output | Notes |
 |-------|-------|--------|-------|
 | `getActiveServices` | — | Service[] | Only isActive=true, sorted by sortOrder |
-| `getAvailableSlots` | date: Date | string[] | Generates slots from ShopSettings, subtracts booked |
+| `getAvailableSlots` | date: Date, serviceId: Int | string[] | Generates slots from ShopSettings, subtracts booked (accounting for service durations) |
 | `getShopInfo` | — | ShopSettings (partial) | Public fields only (name, address, phone, hours, QR image) |
 
 ### Admin Actions (auth required, role check)
@@ -387,15 +387,20 @@ type VerificationResult = {
 ## 9. Slot Generation Logic
 
 ```
-function getAvailableSlots(date, shopSettings, existingAppointments):
+function getAvailableSlots(date, serviceId, shopSettings, existingAppointments):
   1. Check if date is a closed day → return []
   2. Parse openTime and closeTime
   3. Generate all slots from openTime to closeTime at slotDurationMinutes intervals
      e.g., 09:00, 09:30, 10:00, ..., 19:30 (for 30-min slots, 09:00-20:00)
-  4. Get all appointments for that date
-  5. For each appointment: remove its startTime from available slots
-  6. If date is today: remove slots in the past
-  7. Return remaining slots as string array
+  4. Get all appointments for that date (with their service durations)
+  5. For each appointment: calculate which slots it occupies based on its
+     service's durationMinutes (e.g., a 60-min service at 10:00 blocks
+     10:00 AND 10:30 for 30-min base slots)
+  6. Look up the selected service's durationMinutes to determine how many
+     consecutive slots the new booking needs
+  7. Remove any slot where the required consecutive slots are not all free
+  8. If date is today: remove slots in the past
+  9. Return remaining slots as string array
 ```
 
 ---
@@ -502,7 +507,7 @@ BSAM/
 **Setup:**
 1. Push to GitHub repository
 2. Connect Render to the repo
-3. Render builds the Docker image (Wasp generates Dockerfile)
+3. Render builds the Docker image (Wasp can generate a Dockerfile via `wasp build`; the output Docker image may need a custom Render `render.yaml` or manual Dockerfile since Wasp's native CLI deploy only supports Railway/Fly.io)
 4. SQLite file stored on Render's persistent disk (or ephemeral for demo)
 5. Environment variables set in Render dashboard: MSG91_API_KEY, MSG91_SENDER_ID
 
