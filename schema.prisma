@@ -1,0 +1,74 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  username     String        @unique
+  password     String
+  displayName  String        @default("")
+  role         String        @default("BARBER")
+  phone        String?
+  isActive     Boolean       @default(true)
+  appointments Appointment[]
+}
+
+model Service {
+  id              Int           @id @default(autoincrement())
+  name            String
+  description     String?
+  imageUrl        String        @default("")
+  durationMinutes Int
+  price           Int
+  tokenAmount     Int
+  isActive        Boolean       @default(true)
+  sortOrder       Int           @default(0)
+  appointments    Appointment[]
+}
+
+model Appointment {
+  id               Int      @id @default(autoincrement())
+  customerName     String
+  customerPhone    String
+  serviceId        Int
+  service          Service  @relation(fields: [serviceId], references: [id])
+  assignedBarberId Int?
+  assignedBarber   User?    @relation(fields: [assignedBarberId], references: [id])
+  date             DateTime
+  startTime        String
+  status           String   @default("PENDING")
+  paymentMethod    String
+  paymentStatus    String   @default("UNPAID")
+  paymentProof     String?
+  paymentProofType String?
+  otpVerified      Boolean  @default(false)
+  createdAt        DateTime @default(now())
+}
+
+model ShopSettings {
+  id                  Int     @id @default(1)
+  shopName            String
+  address             String
+  phone               String
+  openTime            String  @default("09:00")
+  closeTime           String  @default("20:00")
+  slotDurationMinutes Int     @default(30)
+  upiQrImageUrl       String?
+  tokenAmountDefault  Int     @default(5000)
+  closedDays          String  @default("[]")
+}
+
+model OTPVerification {
+  id        Int      @id @default(autoincrement())
+  phone     String
+  otpHash   String
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+}
