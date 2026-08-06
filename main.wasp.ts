@@ -8,7 +8,15 @@ import { DashboardPage } from "./src/client/pages/admin/DashboardPage" with { ty
 import { getAvailableSlots, getServices, getShopInfo } from "./src/server/queries" with { type: "ref" };
 import { createAppointment, sendBookingOTP } from "./src/server/actions" with { type: "ref" };
 import { getAppointments, getDashboardStats, getBarbers } from "./src/server/adminQueries" with { type: "ref" };
-import { updateAppointmentStatus, verifyPaymentStatus } from "./src/server/adminActions" with { type: "ref" };
+import {
+  updateAppointmentStatus,
+  verifyPaymentStatus,
+  createService,
+  updateService,
+  createBarber,
+  toggleBarberActive,
+  updateShopSettings,
+} from "./src/server/adminActions" with { type: "ref" };
 
 export default app({
   name: "bsam",
@@ -58,6 +66,26 @@ export default app({
     }),
     action(verifyPaymentStatus, {
       entities: ["Appointment"],
+      auth: true,
+    }),
+    action(createService, {
+      entities: ["Service"],
+      auth: true,
+    }),
+    action(updateService, {
+      entities: ["Service"],
+      auth: true,
+    }),
+    action(createBarber, {
+      entities: ["User"],
+      auth: true,
+    }),
+    action(toggleBarberActive, {
+      entities: ["User"],
+      auth: true,
+    }),
+    action(updateShopSettings, {
+      entities: ["ShopSettings"],
       auth: true,
     }),
   ],
