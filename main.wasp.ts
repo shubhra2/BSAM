@@ -1,4 +1,4 @@
-import { app, page, query, route } from "@wasp.sh/spec";
+import { app, action, page, query, route } from "@wasp.sh/spec";
 
 import { App } from "./src/client/App" with { type: "ref" };
 import { LandingPage } from "./src/client/pages/LandingPage" with { type: "ref" };
@@ -6,6 +6,7 @@ import { BookAppointmentPage } from "./src/client/pages/BookAppointmentPage" wit
 import { LoginPage } from "./src/client/pages/admin/LoginPage" with { type: "ref" };
 import { DashboardPage } from "./src/client/pages/admin/DashboardPage" with { type: "ref" };
 import { getAvailableSlots, getServices, getShopInfo } from "./src/server/queries" with { type: "ref" };
+import { createAppointment, sendBookingOTP } from "./src/server/actions" with { type: "ref" };
 
 export default app({
   name: "bsam",
@@ -32,5 +33,11 @@ export default app({
     }),
     query(getServices, { entities: ["Service"], auth: false }),
     query(getShopInfo, { entities: ["ShopSettings"], auth: false }),
+    action(sendBookingOTP, { entities: ["OTPVerification"], auth: false }),
+    action(createAppointment, {
+      entities: ["Appointment", "OTPVerification", "Service", "ShopSettings"],
+      auth: false,
+    }),
   ],
 });
+

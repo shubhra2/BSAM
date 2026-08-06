@@ -1,0 +1,10 @@
+import * as crypto from "crypto";
+
+export function generateOTP(): string {
+  // Ensure we get exactly 6 digits
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+export function hashOTP(otp: string): string {
+  return crypto.createHash("sha256").update(otp).digest("hex");
+}
