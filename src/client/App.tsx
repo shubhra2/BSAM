@@ -1,8 +1,8 @@
-import React from 'react'
+import { Outlet } from 'react-router'
 import './index.css'
 
-export function App({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+export function App() {
+  return <Outlet />
 }
 
 export default App

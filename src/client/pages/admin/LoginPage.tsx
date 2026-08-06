@@ -14,7 +14,7 @@ export function LoginPage() {
     setIsLoading(true);
 
     try {
-      await login(username.trim(), password);
+      await login({ username: username.trim(), password });
       window.location.href = "/dashboard";
     } catch (err: any) {
       setError(err.message || "Invalid username or password");

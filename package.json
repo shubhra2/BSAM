@@ -23,6 +23,7 @@
     "react-hook-form": "^7.82.0",
     "react-phone-number-input": "^3.4.17",
     "react-router": "^7.12.0",
+    "react-router-dom": "^7.12.0",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
     "zod": "^4.4.3"
@@ -36,5 +37,10 @@
     "typescript": "5.9.3",
     "vite": "^7.0.6",
     "vitest": "^4.0.16"
+  },
+  "allowScripts": {
+    "@prisma/engines@5.19.1": true,
+    "esbuild@0.28.1": true,
+    "prisma@5.19.1": true
   }
 }

@@ -8,7 +8,7 @@ import type {
   CreateBarber,
   ToggleBarberActive,
   UpdateShopSettings,
-} from "wasp/server/operations/types";
+} from "wasp/server/operations";
 
 type UpdateStatusArgs = {
   id: number;

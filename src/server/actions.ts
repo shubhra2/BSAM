@@ -4,7 +4,7 @@ import { prisma } from "wasp/server";
 import type {
   CreateAppointment,
   SendBookingOTP,
-} from "wasp/server/operations/types";
+} from "wasp/server/operations";
 
 import { generateOTP, hashOTP } from "./utils/otp";
 import { generateSlots } from "./utils/slots";

@@ -5,7 +5,7 @@ import type {
   GetAppointments,
   GetDashboardStats,
   GetBarbers,
-} from "wasp/server/operations/types";
+} from "wasp/server/operations";
 
 export type AppointmentWithRelations = Prisma.AppointmentGetPayload<{
   include: { service: true; assignedBarber: true };
@@ -128,19 +128,19 @@ export const getDashboardStats: GetDashboardStats<
 
 export const getBarbers: GetBarbers<
   Record<string, never>,
-  Prisma.UserGetPayload<{ select: { id: true; username: true; displayName: true; role: true } }>[]
+  Prisma.UserGetPayload<{ select: { id: true; username: true; displayName: true; role: true; isActive: true } }>[]
 > = async (_args, context) => {
   if (!context.user) {
     throw new HttpError(401, "Authentication required");
   }
 
   return prisma.user.findMany({
-    where: { isActive: true },
     select: {
       id: true,
       username: true,
       displayName: true,
       role: true,
+      isActive: true,
     },
     orderBy: { displayName: "asc" },
   });
