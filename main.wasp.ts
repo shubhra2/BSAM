@@ -7,6 +7,8 @@ import { LoginPage } from "./src/client/pages/admin/LoginPage" with { type: "ref
 import { DashboardPage } from "./src/client/pages/admin/DashboardPage" with { type: "ref" };
 import { getAvailableSlots, getServices, getShopInfo } from "./src/server/queries" with { type: "ref" };
 import { createAppointment, sendBookingOTP } from "./src/server/actions" with { type: "ref" };
+import { getAppointments, getDashboardStats, getBarbers } from "./src/server/adminQueries" with { type: "ref" };
+import { updateAppointmentStatus, verifyPaymentStatus } from "./src/server/adminActions" with { type: "ref" };
 
 export default app({
   name: "bsam",
@@ -38,6 +40,25 @@ export default app({
       entities: ["Appointment", "OTPVerification", "Service", "ShopSettings"],
       auth: false,
     }),
+    query(getAppointments, {
+      entities: ["Appointment", "Service", "User"],
+      auth: true,
+    }),
+    query(getDashboardStats, {
+      entities: ["Appointment", "Service"],
+      auth: true,
+    }),
+    query(getBarbers, {
+      entities: ["User"],
+      auth: true,
+    }),
+    action(updateAppointmentStatus, {
+      entities: ["Appointment"],
+      auth: true,
+    }),
+    action(verifyPaymentStatus, {
+      entities: ["Appointment"],
+      auth: true,
+    }),
   ],
 });
-
