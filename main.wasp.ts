@@ -18,10 +18,15 @@ import {
   updateShopSettings,
 } from "./src/server/adminActions" with { type: "ref" };
 
+import { seedFn } from "./src/server/seed" with { type: "ref" };
+
 export default app({
   name: "bsam",
   title: "BSAM - Barber Shop Appointment Manager",
   wasp: { version: "^0.24.0" },
+  db: {
+    seeds: [seedFn],
+  },
   auth: {
     userEntity: "User",
     methods: {

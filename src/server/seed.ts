@@ -1,6 +1,7 @@
-import type { PrismaClient } from "@prisma/client";
+import { sanitizeAndSerializeProviderData } from "wasp/server/auth";
+import type { DbSeedFn } from "wasp/server";
 
-export async function seedFn(prisma: PrismaClient) {
+export const seedFn: DbSeedFn = async (prisma) => {
   console.log("Seeding database with default BSAM records...");
 
   // 1. Clear existing data
@@ -20,69 +21,91 @@ export async function seedFn(prisma: PrismaClient) {
       openTime: "09:00",
       closeTime: "20:00",
       slotDurationMinutes: 30,
-      upiQrImageUrl: "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa=royalcut@upi&pn=RoyalCutBarber",
-      tokenAmountDefault: 5000, // ₹50 token
+      upiQrImageUrl:
+        "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa=royalcut@upi&pn=RoyalCutBarber",
+      tokenAmountDefault: 5000,
       closedDays: "[]",
     },
   });
 
-  // 3. Create Users
-  const adminUser = await prisma.user.create({
-    data: {
-      username: "admin",
-      password: "admin123", // In production, hash using Wasp auth password hashing
-      displayName: "Master Barber & Owner",
-      role: "ADMIN",
-      phone: "+91 9876543210",
-    },
+  // 3. Create Users with properly hashed credentials via Wasp's auth tables
+  const createStaffUser = async (
+    username: string,
+    password: string,
+    extra: { displayName: string; role: string; phone: string }
+  ) => {
+    const providerData = await sanitizeAndSerializeProviderData<"username">({
+      hashedPassword: password,
+    });
+    return prisma.user.create({
+      data: {
+        username,
+        password: "", // placeholder – real auth is via Auth/AuthIdentity
+        displayName: extra.displayName,
+        role: extra.role,
+        phone: extra.phone,
+        auth: {
+          create: {
+            identities: {
+              create: {
+                providerName: "username",
+                providerUserId: username,
+                providerData,
+              },
+            },
+          },
+        },
+      },
+    });
+  };
+
+  await createStaffUser("admin", "admin123", {
+    displayName: "Master Barber & Owner",
+    role: "ADMIN",
+    phone: "+91 9876543210",
   });
 
-  const barberUser = await prisma.user.create({
-    data: {
-      username: "barber1",
-      password: "barber123",
-      displayName: "Vikram Barber",
-      role: "BARBER",
-      phone: "+91 9876543211",
-    },
+  await createStaffUser("barber1", "barber123", {
+    displayName: "Vikram Barber",
+    role: "BARBER",
+    phone: "+91 9876543211",
   });
 
   // 4. Create Services
-  const haircut = await prisma.service.create({
-    data: {
-      name: "Haircut Only",
-      description: "Classic precision haircut and head wash styling.",
-      imageUrl: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400",
-      durationMinutes: 30,
-      price: 25000, // ₹250
-      tokenAmount: 5000, // ₹50
-      sortOrder: 1,
-    },
-  });
-
-  const haircutAndBeard = await prisma.service.create({
-    data: {
-      name: "Haircut + Beard Trim",
-      description: "Signature haircut paired with sharp beard shaping and hot towel finish.",
-      imageUrl: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400",
-      durationMinutes: 45,
-      price: 40000, // ₹400
-      tokenAmount: 10000, // ₹100
-      sortOrder: 2,
-    },
-  });
-
-  const deluxeSpa = await prisma.service.create({
-    data: {
-      name: "Deluxe Hair Spa & Facial",
-      description: "Deep conditioning head massage, scalp spa, and invigorating charcoal facial.",
-      imageUrl: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=400",
-      durationMinutes: 60,
-      price: 80000, // ₹800
-      tokenAmount: 15000, // ₹150
-      sortOrder: 3,
-    },
+  await prisma.service.createMany({
+    data: [
+      {
+        name: "Haircut Only",
+        description: "Classic precision haircut and head wash styling.",
+        imageUrl:
+          "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400",
+        durationMinutes: 30,
+        price: 25000,
+        tokenAmount: 5000,
+        sortOrder: 1,
+      },
+      {
+        name: "Haircut + Beard Trim",
+        description: "Signature haircut paired with sharp beard shaping.",
+        imageUrl:
+          "https://images.unsplash.com/photo-1599351431202-180f0b22f462?w=400",
+        durationMinutes: 60,
+        price: 40000,
+        tokenAmount: 10000,
+        sortOrder: 2,
+      },
+      {
+        name: "Beard Trim Only",
+        description: "Sharp beard shaping and styling.",
+        imageUrl:
+          "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400",
+        durationMinutes: 30,
+        price: 20000,
+        tokenAmount: 5000,
+        sortOrder: 3,
+      },
+    ],
   });
 
   console.log("Seeding complete!");
-}
+};
