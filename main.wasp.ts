@@ -1,4 +1,7 @@
-import { app, action, query } from "@wasp.sh/spec";
+import { app, action, page, query, route } from "@wasp.sh/spec";
+
+import { LandingPage } from "./src/client/LandingPage" with { type: "ref" };
+import { LoginPage } from "./src/client/LoginPage" with { type: "ref" };
 
 import { getAvailableSlots, getServices, getShopInfo } from "./src/server/queries" with { type: "ref" };
 import { createAppointment, sendBookingOTP } from "./src/server/actions" with { type: "ref" };
@@ -30,6 +33,8 @@ export default app({
     onAuthFailedRedirectTo: "/login",
   },
   spec: [
+    route("LandingRoute", "/", page(LandingPage)),
+    route("LoginRoute", "/login", page(LoginPage)),
     query(getAvailableSlots, {
       entities: ["Appointment", "ShopSettings", "Service"],
       auth: false,
