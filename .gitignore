@@ -1,0 +1,6 @@
+node_modules/
+.wasp/
+*.db
+*.db-journal
+.env.server.*local
+.worktrees/
