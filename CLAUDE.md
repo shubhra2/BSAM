@@ -21,3 +21,8 @@ This project uses the Wasp framework.
 
 - Run `wasp compile` to check if app is valid.
 - Do not run `tsc` directly for validation.
+
+# Wasp Knowledge
+
+Wasp knowledge can be found at @.claude/wasp/general-wasp-knowledge.md
+
