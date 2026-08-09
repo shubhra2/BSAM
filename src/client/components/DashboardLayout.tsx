@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../global.css';
 import { Link as WaspLink } from 'wasp/client/router';
 import { Link, useLocation } from 'react-router';
 import { useAuth, logout } from 'wasp/client/auth';

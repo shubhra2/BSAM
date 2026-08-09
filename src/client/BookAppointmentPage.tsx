@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import './global.css';
 import { useQuery } from 'wasp/client/operations';
 import { getServices, getShopInfo, getAvailableSlots } from 'wasp/client/operations';
 import { createAppointment, sendBookingOTP } from 'wasp/client/operations';
