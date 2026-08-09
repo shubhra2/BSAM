@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './global.css';
 import { login } from 'wasp/client/auth';
 import { Link } from 'wasp/client/router';
+import { ArrowRight, Scissors, Loader2 } from 'lucide-react';
 
 export const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -94,7 +95,7 @@ export const LoginPage = () => {
                 marginBottom: '1.25rem',
               }}
             >
-              <span style={{ fontSize: '0.9rem' }}>✂</span>
+              <Scissors size={14} style={{ color: 'rgba(255,255,255,0.8)' }} />
               <span style={{ color: '#fff', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '-0.01em' }}>
                 BSAM Atelier
               </span>
@@ -228,7 +229,7 @@ export const LoginPage = () => {
                 style={{
                   marginTop: '0.5rem',
                   width: '100%',
-                  padding: '0.875rem',
+                  padding: '0.85rem 1.5rem',
                   borderRadius: '9999px',
                   background: loading ? 'rgba(255,255,255,0.2)' : '#fff',
                   color: '#050505',
@@ -239,11 +240,33 @@ export const LoginPage = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '0.5rem',
-                  transition: 'transform 300ms cubic-bezier(0.32,0.72,0,1)',
+                  gap: '0.75rem',
+                  transition: 'all 300ms cubic-bezier(0.32,0.72,0,1)',
                 }}
               >
-                {loading ? 'Signing in...' : 'Sign In →'}
+                {loading ? (
+                  <>
+                    <Loader2 size={16} style={{ animation: 'spin 0.8s linear infinite' }} />
+                    <span>Signing in...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Sign In</span>
+                    <div
+                      style={{
+                        width: '1.75rem',
+                        height: '1.75rem',
+                        borderRadius: '50%',
+                        background: 'rgba(5,5,5,0.08)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <ArrowRight size={14} strokeWidth={2.5} />
+                    </div>
+                  </>
+                )}
               </button>
             </form>
           </div>
@@ -262,9 +285,11 @@ export const LoginPage = () => {
           from { opacity: 0; transform: translateY(32px); filter: blur(4px); }
           to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
     </div>
   );
 };
 
 export default LoginPage;
+

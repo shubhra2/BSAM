@@ -5,21 +5,35 @@ import { getServices, getShopInfo, getAvailableSlots } from 'wasp/client/operati
 import { createAppointment, sendBookingOTP } from 'wasp/client/operations';
 import { Link } from 'wasp/client/router';
 import { DayPicker } from 'react-day-picker';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Clock,
+  Sun,
+  Sunset,
+  Moon,
+  Sparkles,
+  Loader2,
+  Calendar as CalendarIcon,
+  ShieldCheck,
+  Scissors,
+} from 'lucide-react';
 
 const FALLBACK_SERVICE_IMAGE = "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=600&auto=format&fit=crop";
 
 const STYLE = `
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(32px); filter: blur(4px); }
+    from { opacity: 0; transform: translateY(24px); filter: blur(4px); }
     to { opacity: 1; transform: translateY(0); filter: blur(0); }
   }
   @keyframes slideIn {
-    from { opacity: 0; transform: translateX(32px); }
+    from { opacity: 0; transform: translateX(24px); }
     to { opacity: 1; transform: translateX(0); }
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Premium High-End Custom DayPicker Styling (v9/v10 compatible) */
+  /* Premium High-End Custom DayPicker Styling (Zero Mobile Overflow) */
   .rdp-root {
     --rdp-accent-color: #ffffff;
     --rdp-accent-background-color: rgba(255, 255, 255, 0.12);
@@ -28,7 +42,8 @@ const STYLE = `
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     margin: 0 auto;
     width: 100%;
-    max-width: 350px;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .rdp-month {
     width: 100%;
@@ -37,12 +52,12 @@ const STYLE = `
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 0.5rem 1.25rem 0.5rem;
+    padding: 0 0.25rem 1rem 0.25rem;
     position: relative;
   }
   .rdp-caption_label {
     font-weight: 800;
-    font-size: 1.15rem;
+    font-size: clamp(1rem, 4.5vw, 1.2rem);
     letter-spacing: -0.03em;
     color: #ffffff;
   }
@@ -69,35 +84,38 @@ const STYLE = `
   }
   .rdp-month_grid, .rdp-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: separate;
-    border-spacing: 0.35rem;
+    border-spacing: clamp(1px, 1.2vw, 5px);
     margin-top: 0.25rem;
   }
   .rdp-weekdays, .rdp-head_row {
     display: table-row;
   }
   .rdp-weekday, .rdp-head_cell {
-    font-size: 0.7rem;
+    font-size: clamp(0.6rem, 2.4vw, 0.7rem);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     color: rgba(255,255,255,0.35);
     text-align: center;
-    padding-bottom: 0.625rem;
+    padding-bottom: 0.5rem;
   }
   .rdp-day {
     text-align: center;
     padding: 0;
   }
   .rdp-day_button, .rdp-day button {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 0.75rem;
+    width: 100%;
+    max-width: 2.5rem;
+    height: clamp(2rem, 9vw, 2.5rem);
+    aspect-ratio: 1 / 1;
+    border-radius: 0.625rem;
     border: none;
     background: transparent;
     color: rgba(255,255,255,0.85);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: clamp(0.75rem, 3.2vw, 0.9rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,6 +159,83 @@ const STYLE = `
   .bsam-label {
     display: block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em;
     color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; text-transform: uppercase;
+  }
+
+  /* High-End Interactive Button Animations & Haptics */
+  .bsam-btn-primary {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    border-radius: 9999px;
+    background: #ffffff;
+    color: #050505;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 300ms cubic-bezier(0.32,0.72,0,1);
+    box-shadow: 0 4px 20px rgba(255,255,255,0.15);
+  }
+  .bsam-btn-primary:hover {
+    transform: scale(1.015);
+    box-shadow: 0 6px 24px rgba(255,255,255,0.25);
+  }
+  .bsam-btn-primary:active {
+    transform: scale(0.97);
+  }
+  .bsam-btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .bsam-btn-secondary {
+    padding: 0.85rem 1.5rem;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.07);
+    border: none;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 300ms cubic-bezier(0.32,0.72,0,1);
+  }
+  .bsam-btn-secondary:hover {
+    background: rgba(255,255,255,0.14);
+    transform: scale(1.02);
+  }
+  .bsam-btn-secondary:active {
+    transform: scale(0.97);
+  }
+
+  .bsam-icon-circle {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: rgba(5,5,5,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 300ms cubic-bezier(0.32,0.72,0,1);
+  }
+  .bsam-btn-primary:hover .bsam-icon-circle {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 480px) {
+    .bsam-container-inner {
+      padding: 1rem 0.75rem !important;
+    }
+    .bsam-bezel-padding {
+      padding: 0.875rem 0.5rem !important;
+    }
   }
 `;
 
@@ -323,9 +418,7 @@ export const BookAppointmentPage = () => {
     color: '#fff',
     display: 'flex',
     flexDirection: 'column',
-  };
-
-  if (confirmed) {
+  };  if (confirmed) {
     const tokenVal = selectedService?.tokenAmount || 5000;
     const totalVal = selectedService?.price || 0;
     const balanceVal = Math.max(0, totalVal - tokenVal);
@@ -336,11 +429,13 @@ export const BookAppointmentPage = () => {
         <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
           <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '60vw', height: '60vw', borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)' }} />
         </div>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', position: 'relative', zIndex: 1 }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', position: 'relative', zIndex: 1 }}>
           <div style={{ maxWidth: '28rem', width: '100%', textAlign: 'center', animation: 'fadeUp 700ms cubic-bezier(0.32,0.72,0,1) forwards' }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>✓</div>
-            <div style={{ padding: '0.25rem', borderRadius: '1.75rem', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)', marginBottom: '1.5rem' }}>
-              <div style={{ borderRadius: 'calc(1.75rem - 4px)', background: 'rgba(10,10,10,0.95)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)', padding: '2rem' }}>
+            <div style={{ width: '4.5rem', height: '4.5rem', borderRadius: '50%', background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', color: '#10b981', boxShadow: '0 0 25px rgba(16,185,129,0.2)' }}>
+              <Check size={36} strokeWidth={2.5} />
+            </div>
+            <div style={{ padding: '0.2rem', borderRadius: '1.75rem', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)', marginBottom: '1.5rem' }}>
+              <div style={{ borderRadius: 'calc(1.75rem - 4px)', background: 'rgba(10,10,10,0.95)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)', padding: '1.75rem 1.25rem' }}>
                 <div style={{ marginBottom: '0.375rem', fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(16,185,129,0.9)', fontWeight: 700 }}>
                   Booking Reserved
                 </div>
@@ -364,9 +459,13 @@ export const BookAppointmentPage = () => {
             </div>
             <button
               onClick={() => { setConfirmed(null); setStep('info'); setCustomerName(''); setCustomerPhone(''); setSelectedService(null); setSelectedDate(undefined); setSelectedTime(''); setOtp(''); setOtpSent(false); setPaymentProof(''); }}
-              style={{ padding: '0.85rem 2.25rem', borderRadius: '9999px', background: '#fff', color: '#050505', fontWeight: 700, fontSize: '0.95rem', border: 'none', cursor: 'pointer' }}
+              className="bsam-btn-primary"
+              style={{ width: 'auto', margin: '0 auto', padding: '0.85rem 2rem' }}
             >
-              Book Another
+              <span>Book Another</span>
+              <div className="bsam-icon-circle">
+                <Sparkles size={14} />
+              </div>
             </button>
           </div>
         </div>
@@ -385,14 +484,14 @@ export const BookAppointmentPage = () => {
       </div>
 
       {/* Nav */}
-      <div style={{ position: 'relative', zIndex: 10, padding: '1.25rem 2rem', borderBottom: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255,255,255,0.6)', fontWeight: 600, fontSize: '0.85rem' }}>
-          ← Back
+      <div style={{ position: 'relative', zIndex: 10, padding: '1.25rem 1.5rem', borderBottom: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: 'rgba(255,255,255,0.6)', fontWeight: 600, fontSize: '0.85rem', transition: 'color 200ms' }}>
+          <ArrowLeft size={16} /> Back
         </Link>
         <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 500 }}>
           Book Appointment
         </span>
-        <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)' }}>
+        <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)', fontWeight: 600 }}>
           Step {stepIndex + 1} / {STEPS.length}
         </span>
       </div>
@@ -408,7 +507,7 @@ export const BookAppointmentPage = () => {
       </div>
 
       {/* Step Indicator */}
-      <div style={{ position: 'relative', zIndex: 10, padding: '1.5rem 2rem 0', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+      <div style={{ position: 'relative', zIndex: 10, padding: '1.25rem 1rem 0', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
         {STEPS.map((s, i) => (
           <div key={s} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
             <div style={{
@@ -420,18 +519,18 @@ export const BookAppointmentPage = () => {
               color: i === stepIndex ? '#050505' : i < stepIndex ? '#fff' : 'rgba(255,255,255,0.3)',
               transition: 'all 400ms cubic-bezier(0.32,0.72,0,1)',
             }}>
-              {i < stepIndex ? '✓' : i + 1}
+              {i < stepIndex ? <Check size={11} strokeWidth={3} /> : i + 1}
             </div>
           </div>
         ))}
       </div>
 
       {/* Main Content Area */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem', position: 'relative', zIndex: 1 }}>
+      <div className="bsam-container-inner" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1.75rem 1.25rem', position: 'relative', zIndex: 1, boxSizing: 'border-box', width: '100%' }}>
         <div style={{ width: '100%', maxWidth: '36rem', animation: 'slideIn 400ms cubic-bezier(0.32,0.72,0,1) forwards' }} key={step}>
 
           {/* Header Title */}
-          <div style={{ marginBottom: '2rem' }}>
+          <div style={{ marginBottom: '1.75rem' }}>
             <span style={{ fontSize: '0.65rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>
               Step {stepIndex + 1} of {STEPS.length}
             </span>
@@ -476,16 +575,12 @@ export const BookAppointmentPage = () => {
                   setError('');
                   goNext();
                 }}
-                style={{
-                  padding: '0.875rem', borderRadius: '9999px',
-                  background: '#fff', color: '#050505',
-                  fontWeight: 700, fontSize: '0.95rem', border: 'none', cursor: 'pointer',
-                  transition: 'transform 300ms cubic-bezier(0.32,0.72,0,1)',
-                }}
-                onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.transform = 'scale(0.98)')}
-                onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)')}
+                className="bsam-btn-primary"
               >
-                Select Service →
+                <span>Select Service</span>
+                <div className="bsam-icon-circle">
+                  <ArrowRight size={14} strokeWidth={2.5} />
+                </div>
               </button>
             </div>
           )}
@@ -538,10 +633,10 @@ export const BookAppointmentPage = () => {
                         border: 'none',
                         background: selectedService?.id === service.id ? '#fff' : 'rgba(255,255,255,0.1)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '0.65rem', fontWeight: 700, color: '#050505',
+                        color: '#050505',
                         transition: 'all 300ms cubic-bezier(0.32,0.72,0,1)',
                       }}>
-                        {selectedService?.id === service.id ? '✓' : ''}
+                        {selectedService?.id === service.id ? <Check size={12} strokeWidth={3} /> : null}
                       </div>
                     </div>
                   </div>
@@ -551,35 +646,45 @@ export const BookAppointmentPage = () => {
               {error && <p style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1rem' }}>{error}</p>}
               
               <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button onClick={goBack} style={{ padding: '0.875rem 1.5rem', borderRadius: '9999px', background: 'rgba(255,255,255,0.07)', border: 'none', color: '#fff', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer' }}>← Back</button>
+                <button onClick={goBack} className="bsam-btn-secondary">
+                  <ArrowLeft size={16} /> Back
+                </button>
                 <button
                   onClick={() => { if (!selectedService) return setError('Please select a service'); setError(''); goNext(); }}
-                  style={{ flex: 1, padding: '0.875rem', borderRadius: '9999px', background: '#fff', color: '#050505', fontWeight: 700, fontSize: '0.95rem', border: 'none', cursor: 'pointer' }}
+                  className="bsam-btn-primary"
+                  style={{ flex: 1 }}
                 >
-                  Pick Date & Time →
+                  <span>Pick Date & Time</span>
+                  <div className="bsam-icon-circle">
+                    <ArrowRight size={14} strokeWidth={2.5} />
+                  </div>
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 3: Date & Time (Designed according to high-end-visual-design) */}
+          {/* STEP 3: Date & Time (High-End Responsive Calendar + Double-Bezel Slot Architecture) */}
           {step === 'datetime' && (
             <div>
-              {/* Double-Bezel Calendar Enclosure */}
+              {/* Double-Bezel Calendar Enclosure (Zero Mobile Overflow) */}
               <div style={{
                 padding: '0.2rem',
                 borderRadius: '1.75rem',
                 background: 'rgba(255,255,255,0.04)',
                 border: 'none',
                 marginBottom: '1.5rem',
+                width: '100%',
+                boxSizing: 'border-box',
               }}>
-                <div style={{
+                <div className="bsam-bezel-padding" style={{
                   borderRadius: 'calc(1.75rem - 4px)',
                   background: 'rgba(12,12,12,0.98)',
                   boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)',
-                  padding: '1.25rem 1.5rem',
+                  padding: '1.25rem 1rem',
                   display: 'flex',
                   justifyContent: 'center',
+                  width: '100%',
+                  boxSizing: 'border-box',
                 }}>
                   <DayPicker
                     mode="single"
@@ -591,53 +696,100 @@ export const BookAppointmentPage = () => {
                 </div>
               </div>
 
-              {/* Time Slots Section */}
+              {/* Time Slots Section (High-End Agency Tier) */}
               {selectedDate && (
-                <div style={{ marginBottom: '1.75rem', animation: 'fadeUp 400ms ease forwards' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                    <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 600 }}>
-                      Available Slots on {selectedDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}
-                    </span>
-                    <span style={{ fontSize: '0.7rem', color: 'rgba(16,185,129,0.8)', fontWeight: 600 }}>
+                <div style={{ marginBottom: '1.75rem', animation: 'fadeUp 400ms cubic-bezier(0.32,0.72,0,1) forwards' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span style={{ width: '0.5rem', height: '0.5rem', borderRadius: '50%', background: '#10b981', display: 'inline-block', boxShadow: '0 0 10px #10b981' }} />
+                      <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>
+                        {selectedDate.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '0.68rem', color: 'rgba(16,185,129,0.9)', fontWeight: 600, background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.6rem', borderRadius: '9999px', border: '1px solid rgba(16,185,129,0.2)' }}>
                       {selectedService?.durationMinutes} min slots
                     </span>
                   </div>
 
                   {!slots ? (
-                    <div style={{ padding: '1.5rem', textAlign: 'center', color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem' }}>
-                      Fetching live availability...
+                    <div style={{ padding: '2rem', textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.625rem' }}>
+                      <Loader2 size={18} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />
+                      Fetching live slot availability...
                     </div>
                   ) : slots.filter((s: any) => s.available).length === 0 ? (
-                    <div style={{ padding: '1.5rem', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '1rem', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>
-                      Fully booked on this date. Please pick another date.
+                    <div style={{ padding: '1.75rem', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '1.25rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>
+                      Fully booked on this date. Please select another date above.
                     </div>
                   ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '0.5rem' }}>
-                      {slots.filter((s: any) => s.available).map((slot: any) => {
-                        const isSelected = selectedTime === slot.time;
-                        return (
-                          <button
-                            key={slot.time}
-                            onClick={() => { setSelectedTime(slot.time); if (error) setError(''); }}
-                            style={{
-                              padding: '0.625rem 0.5rem',
-                              borderRadius: '0.75rem',
-                              background: isSelected ? '#ffffff' : 'rgba(255,255,255,0.05)',
-                              border: 'none',
-                              color: isSelected ? '#050505' : 'rgba(255,255,255,0.85)',
-                              fontWeight: isSelected ? 800 : 600,
-                              fontSize: '0.85rem',
-                              cursor: 'pointer',
-                              transition: 'all 200ms cubic-bezier(0.32,0.72,0,1)',
-                              boxShadow: isSelected ? '0 0 15px rgba(255,255,255,0.2)' : 'none',
-                              fontFamily: 'inherit',
-                            }}
-                          >
-                            {slot.time}
-                          </button>
-                        );
-                      })}
-                    </div>
+                    (() => {
+                      const availableList = slots.filter((s: any) => s.available);
+                      const getPeriod = (t: string) => {
+                        const h = parseInt(t.split(':')[0], 10);
+                        if (h < 12) return 'Morning';
+                        if (h < 17) return 'Afternoon';
+                        return 'Evening';
+                      };
+
+                      const periods = [
+                        { name: 'Morning', icon: Sun, items: availableList.filter((s: any) => getPeriod(s.time) === 'Morning') },
+                        { name: 'Afternoon', icon: Sunset, items: availableList.filter((s: any) => getPeriod(s.time) === 'Afternoon') },
+                        { name: 'Evening', icon: Moon, items: availableList.filter((s: any) => getPeriod(s.time) === 'Evening') },
+                      ].filter(p => p.items.length > 0);
+
+                      return (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                          {periods.map(period => {
+                            const IconComponent = period.icon;
+                            return (
+                              <div key={period.name} style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                                  <IconComponent size={13} style={{ color: 'rgba(255,255,255,0.6)' }} />
+                                  <span>{period.name}</span>
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: '0.5rem' }}>
+                                  {period.items.map((slot: any) => {
+                                    const isSelected = selectedTime === slot.time;
+                                    return (
+                                      <button
+                                        key={slot.time}
+                                        onClick={() => { setSelectedTime(slot.time); if (error) setError(''); }}
+                                        style={{
+                                          padding: '0.15rem',
+                                          borderRadius: '0.875rem',
+                                          background: isSelected ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.03)',
+                                          border: 'none',
+                                          cursor: 'pointer',
+                                          transition: 'all 250ms cubic-bezier(0.32,0.72,0,1)',
+                                          transform: isSelected ? 'scale(1.04)' : 'scale(1)',
+                                        }}
+                                      >
+                                        <div style={{
+                                          borderRadius: 'calc(0.875rem - 2px)',
+                                          background: isSelected ? '#ffffff' : 'rgba(20,20,20,0.85)',
+                                          color: isSelected ? '#050505' : 'rgba(255,255,255,0.9)',
+                                          padding: '0.65rem 0.5rem',
+                                          fontWeight: isSelected ? 800 : 600,
+                                          fontSize: '0.85rem',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          gap: '0.35rem',
+                                          boxShadow: isSelected ? '0 0 20px rgba(255,255,255,0.35)' : 'inset 0 1px 1px rgba(255,255,255,0.06)',
+                                          transition: 'all 250ms cubic-bezier(0.32,0.72,0,1)',
+                                        }}>
+                                          {isSelected && <Check size={12} strokeWidth={3} />}
+                                          <span>{slot.time}</span>
+                                        </div>
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()
                   )}
                 </div>
               )}
@@ -645,7 +797,9 @@ export const BookAppointmentPage = () => {
               {error && <p style={{ color: '#ef4444', fontSize: '0.85rem', marginBottom: '1rem' }}>{error}</p>}
               
               <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button onClick={goBack} style={{ padding: '0.875rem 1.5rem', borderRadius: '9999px', background: 'rgba(255,255,255,0.07)', border: 'none', color: '#fff', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer' }}>← Back</button>
+                <button onClick={goBack} className="bsam-btn-secondary">
+                  <ArrowLeft size={16} /> Back
+                </button>
                 <button
                   onClick={() => {
                     if (!selectedDate) return setError('Please select an appointment date');
@@ -653,15 +807,19 @@ export const BookAppointmentPage = () => {
                     setError('');
                     goNext();
                   }}
-                  style={{ flex: 1, padding: '0.875rem', borderRadius: '9999px', background: '#fff', color: '#050505', fontWeight: 700, fontSize: '0.95rem', border: 'none', cursor: 'pointer' }}
+                  className="bsam-btn-primary"
+                  style={{ flex: 1 }}
                 >
-                  Proceed to Payment →
+                  <span>Proceed to Payment</span>
+                  <div className="bsam-icon-circle">
+                    <ArrowRight size={14} strokeWidth={2.5} />
+                  </div>
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 4: Token Payment Only (Item 4: Pay at Shop removed, Token Amount deducted from final bill) */}
+          {/* STEP 4: Token Payment Only */}
           {step === 'payment' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {/* Payment Summary Box */}
@@ -672,8 +830,8 @@ export const BookAppointmentPage = () => {
                     <span style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>
                       Token Deposit Model
                     </span>
-                    <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600, background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.6rem', borderRadius: '9999px' }}>
-                      Required to Lock Slot
+                    <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600, background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.6rem', borderRadius: '9999px', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <ShieldCheck size={13} /> Required to Lock Slot
                     </span>
                   </div>
 
@@ -707,13 +865,7 @@ export const BookAppointmentPage = () => {
                 <div style={{ borderRadius: 'calc(1.5rem - 3px)', background: '#ffffff', padding: '1.5rem', textAlign: 'center', position: 'relative', minHeight: '220px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   {(!shopInfo?.upiQrImageUrl || !qrLoaded) && (
                     <div style={{ padding: '1.5rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
-                      <div style={{
-                        width: '2.5rem', height: '2.5rem',
-                        border: '3px solid rgba(5,5,5,0.1)',
-                        borderTopColor: '#050505',
-                        borderRadius: '50%',
-                        animation: 'spin 800ms linear infinite',
-                      }} />
+                      <Loader2 size={32} color="#050505" style={{ animation: 'spin 800ms linear infinite' }} />
                       <span style={{ color: 'rgba(5,5,5,0.6)', fontSize: '0.85rem', fontWeight: 600 }}>
                         Loading QR code...
                       </span>
@@ -749,7 +901,9 @@ export const BookAppointmentPage = () => {
               {error && <p style={{ color: '#ef4444', fontSize: '0.85rem', margin: 0 }}>{error}</p>}
 
               <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button onClick={goBack} style={{ padding: '0.875rem 1.5rem', borderRadius: '9999px', background: 'rgba(255,255,255,0.07)', border: 'none', color: '#fff', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer' }}>← Back</button>
+                <button onClick={goBack} className="bsam-btn-secondary">
+                  <ArrowLeft size={16} /> Back
+                </button>
                 <button
                   onClick={() => {
                     if (!paymentProof.trim()) return setError('Please enter your UPI transaction ID / Reference number to continue');
@@ -757,9 +911,13 @@ export const BookAppointmentPage = () => {
                     setStep('otp');
                     if (!otpSent) handleSendOtp();
                   }}
-                  style={{ flex: 1, padding: '0.875rem', borderRadius: '9999px', background: '#fff', color: '#050505', fontWeight: 700, fontSize: '0.95rem', border: 'none', cursor: 'pointer' }}
+                  className="bsam-btn-primary"
+                  style={{ flex: 1 }}
                 >
-                  Verify OTP →
+                  <span>Verify OTP</span>
+                  <div className="bsam-icon-circle">
+                    <ArrowRight size={14} strokeWidth={2.5} />
+                  </div>
                 </button>
               </div>
             </div>
@@ -816,25 +974,28 @@ export const BookAppointmentPage = () => {
               {error && <p style={{ color: '#ef4444', fontSize: '0.85rem', textAlign: 'center', margin: 0 }}>{error}</p>}
 
               <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <button onClick={goBack} style={{ padding: '0.875rem 1.5rem', borderRadius: '9999px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer' }}>← Back</button>
+                <button onClick={goBack} className="bsam-btn-secondary">
+                  <ArrowLeft size={16} /> Back
+                </button>
                 <button
                   onClick={handleSubmit}
                   disabled={loading || otp.length < 6}
-                  style={{
-                    flex: 1, padding: '0.875rem', borderRadius: '9999px',
-                    background: loading || otp.length < 6 ? 'rgba(255,255,255,0.2)' : '#fff',
-                    color: '#050505', fontWeight: 700, fontSize: '0.95rem',
-                    border: 'none', cursor: loading || otp.length < 6 ? 'not-allowed' : 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-                    transition: 'all 300ms cubic-bezier(0.32,0.72,0,1)',
-                  }}
+                  className="bsam-btn-primary"
+                  style={{ flex: 1 }}
                 >
                   {loading ? (
                     <>
-                      <span style={{ width: '1rem', height: '1rem', borderRadius: '50%', border: '2px solid rgba(0,0,0,0.2)', borderTopColor: '#050505', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />
-                      Confirming...
+                      <Loader2 size={16} style={{ animation: 'spin 0.8s linear infinite' }} />
+                      <span>Confirming...</span>
                     </>
-                  ) : 'Confirm Booking ✓'}
+                  ) : (
+                    <>
+                      <span>Confirm Booking</span>
+                      <div className="bsam-icon-circle">
+                        <Check size={14} strokeWidth={2.5} />
+                      </div>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
