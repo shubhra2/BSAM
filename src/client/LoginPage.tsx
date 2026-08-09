@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './global.css';
 import { login } from 'wasp/client/auth';
 import { Link } from 'wasp/client/router';
 import { ArrowRight, Scissors, Loader2 } from 'lucide-react';

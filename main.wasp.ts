@@ -23,11 +23,15 @@ import {
 } from "./src/server/adminActions" with { type: "ref" };
 
 import { seedFn } from "./src/server/seed" with { type: "ref" };
+import { setupClient } from "./src/client/setupClient" with { type: "ref" };
 
 export default app({
   name: "bsam",
   title: "BSAM - Barber Shop Appointment Manager",
   wasp: { version: "^0.25.0" },
+  client: {
+    setupFn: setupClient,
+  },
   db: {
     seeds: [seedFn],
   },
