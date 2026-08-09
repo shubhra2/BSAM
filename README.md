@@ -1,5 +1,7 @@
 # BSAM — Barber Shop Appointment Manager
 
+**Live Demo:** [https://oraclevm.tail976b9d.ts.net:8443/](https://oraclevm.tail976b9d.ts.net:8443/)
+
 BSAM is a planned mobile-first web application for a single barber shop. It gives customers a quick way to book appointments online without creating an account, while giving the shop owner and barbers a dashboard to manage the schedule.
 
 ## Project goal

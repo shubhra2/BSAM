@@ -2,5 +2,8 @@ node_modules/
 .wasp/
 *.db
 *.db-journal
+.env.server
+.env.client
 .env.server.*local
 .worktrees/
+.playwright-cli/

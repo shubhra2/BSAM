@@ -2,17 +2,13 @@
 # Append this block to /etc/caddy/Caddyfile on the Oracle server.
 
 # ── BSAM — Barber Shop Appointment Manager ────────────────────────────────────
-:8080 {
+:8443 {
     # Wasp server API routes (operations, auth, health check)
     handle /operations/* {
         reverse_proxy localhost:3001
     }
 
     handle /auth/* {
-        reverse_proxy localhost:3001
-    }
-
-    handle / {
         reverse_proxy localhost:3001
     }
 

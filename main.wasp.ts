@@ -24,6 +24,7 @@ import {
 
 import { seedFn } from "./src/server/seed" with { type: "ref" };
 import { setupClient } from "./src/client/setupClient" with { type: "ref" };
+import { serverMiddlewareFn } from "./src/serverSetup" with { type: "ref" };
 
 export default app({
   name: "bsam",
@@ -31,6 +32,9 @@ export default app({
   wasp: { version: "^0.25.0" },
   client: {
     setupFn: setupClient,
+  },
+  server: {
+    middlewareConfigFn: serverMiddlewareFn,
   },
   db: {
     seeds: [seedFn],
