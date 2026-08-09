@@ -23,7 +23,7 @@ import { seedFn } from "./src/server/seed" with { type: "ref" };
 export default app({
   name: "bsam",
   title: "BSAM - Barber Shop Appointment Manager",
-  wasp: { version: "^0.24.0" },
+  wasp: { version: "^0.25.0" },
   db: {
     seeds: [seedFn],
   },
