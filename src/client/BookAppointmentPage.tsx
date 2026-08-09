@@ -487,12 +487,26 @@ export const BookAppointmentPage = () => {
         <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: 'rgba(255,255,255,0.6)', fontWeight: 600, fontSize: '0.85rem', transition: 'color 200ms' }}>
           <ArrowLeft size={16} /> Back
         </Link>
-        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 500 }}>
+        <span className="nav-hide-mobile" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 500 }}>
           Book Appointment
         </span>
-        <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)', fontWeight: 600 }}>
-          Step {stepIndex + 1} / {STEPS.length}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <Link
+            to="/login"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.35rem 0.65rem', borderRadius: '9999px',
+              background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)',
+              color: '#10b981', fontSize: '0.75rem', fontWeight: 700,
+              textDecoration: 'none', whiteSpace: 'nowrap'
+            }}
+          >
+            <ShieldCheck size={13} strokeWidth={2.5} /> Admin
+          </Link>
+          <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)', fontWeight: 600 }}>
+            {stepIndex + 1}/{STEPS.length}
+          </span>
+        </div>
       </div>
 
       {/* Progress Bar */}

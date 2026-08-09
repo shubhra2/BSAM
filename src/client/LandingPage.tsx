@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'wasp/client/operations';
 import { getShopInfo, getServices } from 'wasp/client/operations';
 import { Link } from 'wasp/client/router';
+import { Lock, Shield, Menu, X, ChevronRight, ArrowUpRight } from 'lucide-react';
 
 function useScrollReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -96,7 +97,7 @@ export const LandingPage = () => {
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
           display: 'flex', justifyContent: 'center',
-          padding: '1.5rem 1rem 0',
+          padding: '1.25rem 0.75rem 0',
           pointerEvents: 'none',
         }}
       >
@@ -105,34 +106,52 @@ export const LandingPage = () => {
           style={{
             pointerEvents: 'all',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            gap: '1.5rem',
-            padding: '0.625rem 0.75rem 0.625rem 1.25rem',
+            gap: '0.75rem',
+            padding: '0.5rem 0.625rem 0.5rem 1rem',
             borderRadius: '9999px',
-            background: scrolled ? 'rgba(5,5,5,0.85)' : 'rgba(255,255,255,0.05)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255,255,255,0.08)',
+            background: scrolled ? 'rgba(5,5,5,0.92)' : 'rgba(255,255,255,0.07)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            border: '1px solid rgba(255,255,255,0.12)',
             transition: 'background 600ms cubic-bezier(0.32,0.72,0,1)',
-            maxWidth: 'calc(100vw - 2rem)',
+            maxWidth: 'calc(100vw - 1.5rem)',
+            width: '100%',
           }}
         >
-          <span style={{ fontWeight: 700, fontSize: '0.85rem', letterSpacing: '-0.01em', color: '#fff', whiteSpace: 'nowrap' }}>
-            ✂ {shopName}
-          </span>
-          <div className="landing-nav-links" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <a href="#services" className="nav-hide-mobile" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.02em', textDecoration: 'none' }}>
+          <Link to="/" style={{ textDecoration: 'none', color: '#fff' }}>
+            <span style={{ fontWeight: 800, fontSize: '0.85rem', letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
+              ✂ {shopName}
+            </span>
+          </Link>
+          <div className="landing-nav-links" style={{ display: 'flex', gap: '0.625rem', alignItems: 'center' }}>
+            <a href="#services" className="nav-hide-mobile" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.02em', textDecoration: 'none', padding: '0 0.5rem' }}>
               Services
             </a>
-            <a href="#info" className="nav-hide-mobile" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.02em', textDecoration: 'none' }}>
+            <a href="#info" className="nav-hide-mobile" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.02em', textDecoration: 'none', padding: '0 0.5rem' }}>
               Hours
             </a>
+            
+            {/* Always Visible Admin Pill on Mobile & Desktop */}
             <Link
               to="/login"
-              className="nav-hide-mobile"
-              style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 500, textDecoration: 'none' }}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+                padding: '0.4rem 0.75rem',
+                borderRadius: '9999px',
+                background: 'rgba(16,185,129,0.12)',
+                border: '1px solid rgba(16,185,129,0.3)',
+                color: '#10b981',
+                fontWeight: 700, fontSize: '0.78rem', textDecoration: 'none',
+                whiteSpace: 'nowrap',
+                transition: 'transform 200ms cubic-bezier(0.32,0.72,0,1)',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
             >
-              Admin
+              <Shield size={13} strokeWidth={2.5} />
+              <span>Admin</span>
             </Link>
+
             <Link
               to="/book"
               className="book-btn"
@@ -148,7 +167,7 @@ export const LandingPage = () => {
               onMouseEnter={e => (e.currentTarget.style.transform = 'scale(0.97)')}
               onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
             >
-              Book Now
+              <span>Book</span>
               <span style={{
                 width: '1.25rem', height: '1.25rem', borderRadius: '50%',
                 background: 'rgba(0,0,0,0.08)',
@@ -157,9 +176,154 @@ export const LandingPage = () => {
                 transition: 'transform 300ms cubic-bezier(0.32,0.72,0,1)',
               }}>↗</span>
             </Link>
+
+            {/* Mobile Menu Hamburger Morph Toggle */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="nav-mobile-toggle"
+              aria-label="Toggle Menu"
+              style={{
+                display: 'none',
+                alignItems: 'center', justifyContent: 'center',
+                width: '2.1rem', height: '2.1rem',
+                borderRadius: '50%',
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                color: '#fff',
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            >
+              {menuOpen ? <X size={15} /> : <Menu size={15} />}
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* Fullscreen Mobile Navigation Drawer Modal */}
+      {menuOpen && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 45,
+            background: 'rgba(5,5,5,0.96)',
+            backdropFilter: 'blur(30px)',
+            WebkitBackdropFilter: 'blur(30px)',
+            display: 'flex', flexDirection: 'column',
+            justifyContent: 'center',
+            padding: '5rem 1.5rem 2rem',
+            animation: 'fadeUp 300ms cubic-bezier(0.32,0.72,0,1) forwards',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '28rem', margin: '0 auto', width: '100%' }}>
+            {/* Highlighted Admin Card for Owner */}
+            <Link
+              to="/login"
+              onClick={() => setMenuOpen(false)}
+              style={{
+                padding: '0.2rem',
+                borderRadius: '1.5rem',
+                background: 'linear-gradient(135deg, rgba(16,185,129,0.3) 0%, rgba(139,92,246,0.2) 100%)',
+                border: '1px solid rgba(16,185,129,0.4)',
+                textDecoration: 'none',
+              }}
+            >
+              <div style={{
+                borderRadius: 'calc(1.5rem - 3px)',
+                background: 'rgba(12,12,12,0.98)',
+                padding: '1.25rem 1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+                  <div style={{
+                    width: '2.75rem', height: '2.75rem', borderRadius: '50%',
+                    background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981',
+                    flexShrink: 0,
+                  }}>
+                    <Lock size={20} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#10b981', fontWeight: 800 }}>
+                      Owner & Barber Portal
+                    </div>
+                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff', marginTop: '0.1rem' }}>
+                      Admin Panel Login
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight size={22} style={{ color: '#10b981' }} />
+              </div>
+            </Link>
+
+            {/* Book Appointment */}
+            <Link
+              to="/book"
+              onClick={() => setMenuOpen(false)}
+              style={{
+                padding: '1.15rem 1.5rem',
+                borderRadius: '1.25rem',
+                background: '#fff',
+                color: '#050505',
+                fontWeight: 800,
+                fontSize: '1rem',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <span>Book Appointment</span>
+              <ArrowUpRight size={18} />
+            </Link>
+
+            {/* Services */}
+            <a
+              href="#services"
+              onClick={() => setMenuOpen(false)}
+              style={{
+                padding: '1.15rem 1.5rem',
+                borderRadius: '1.25rem',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                color: '#fff',
+                fontWeight: 600,
+                fontSize: '1rem',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <span>Services & Pricing</span>
+              <ChevronRight size={18} style={{ color: 'rgba(255,255,255,0.4)' }} />
+            </a>
+
+            {/* Hours */}
+            <a
+              href="#info"
+              onClick={() => setMenuOpen(false)}
+              style={{
+                padding: '1.15rem 1.5rem',
+                borderRadius: '1.25rem',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                color: '#fff',
+                fontWeight: 600,
+                fontSize: '1rem',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <span>Opening Hours & Location</span>
+              <ChevronRight size={18} style={{ color: 'rgba(255,255,255,0.4)' }} />
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section className="hero-section" style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '8rem 2rem 4rem', position: 'relative', zIndex: 1 }}>
@@ -618,15 +782,52 @@ export const LandingPage = () => {
 
       {/* Footer */}
       <footer style={{
-        padding: '2rem 1.5rem',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
+        padding: '3rem 1.5rem',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
         zIndex: 1, position: 'relative',
+        background: 'rgba(0,0,0,0.5)',
       }}>
-        <div style={{ maxWidth: '72rem', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>✂ {shopName}</span>
-          <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.2)' }}>
-            {shopInfo?.phone}&nbsp;&nbsp;·&nbsp;&nbsp;{shopInfo?.address}
-          </span>
+        <div style={{ maxWidth: '72rem', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <span style={{ fontWeight: 800, color: '#fff', fontSize: '1rem', letterSpacing: '-0.02em', display: 'block', marginBottom: '0.25rem' }}>
+                ✂ {shopName}
+              </span>
+              <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)' }}>
+                {shopInfo?.phone}&nbsp;&nbsp;·&nbsp;&nbsp;{shopInfo?.address}
+              </span>
+            </div>
+
+            {/* Always-visible Mobile & Desktop Admin Portal Link in Footer */}
+            <Link
+              to="/login"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.625rem 1.25rem',
+                borderRadius: '9999px',
+                background: 'rgba(16,185,129,0.12)',
+                border: '1px solid rgba(16,185,129,0.3)',
+                color: '#10b981',
+                fontWeight: 700,
+                fontSize: '0.8rem',
+                textDecoration: 'none',
+                transition: 'all 200ms cubic-bezier(0.32,0.72,0,1)',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.02)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+            >
+              <Shield size={14} strokeWidth={2.5} />
+              <span>Owner & Staff Admin Portal</span>
+              <ChevronRight size={14} style={{ opacity: 0.6 }} />
+            </Link>
+          </div>
+
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
+            <span>© {new Date().getFullYear()} {shopName}. Mobile-First Shop Management.</span>
+            <span>Admin URL: <strong style={{ color: '#10b981' }}>/login</strong></span>
+          </div>
         </div>
       </footer>
 
@@ -651,6 +852,7 @@ export const LandingPage = () => {
         }
         @media (max-width: 768px) {
           .nav-hide-mobile { display: none !important; }
+          .nav-mobile-toggle { display: inline-flex !important; }
           .hero-section { padding: 6rem 1.25rem 3rem !important; }
           .hero-actions { width: 100% !important; margin-left: 0 !important; margin-top: 1rem !important; flex-direction: column !important; }
           .hero-actions > a { width: 100% !important; justify-content: center !important; }
@@ -665,3 +867,4 @@ export const LandingPage = () => {
 };
 
 export default LandingPage;
+
