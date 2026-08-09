@@ -2,10 +2,16 @@ import { app, action, page, query, route } from "@wasp.sh/spec";
 
 import { LandingPage } from "./src/client/LandingPage" with { type: "ref" };
 import { LoginPage } from "./src/client/LoginPage" with { type: "ref" };
+import { BookAppointmentPage } from "./src/client/BookAppointmentPage" with { type: "ref" };
+import { DashboardPage } from "./src/client/DashboardPage" with { type: "ref" };
+import { AppointmentDetailPage } from "./src/client/AppointmentDetailPage" with { type: "ref" };
+import { ServicesPage } from "./src/client/ServicesPage" with { type: "ref" };
+import { BarbersPage } from "./src/client/BarbersPage" with { type: "ref" };
+import { SettingsPage } from "./src/client/SettingsPage" with { type: "ref" };
 
 import { getAvailableSlots, getServices, getShopInfo } from "./src/server/queries" with { type: "ref" };
 import { createAppointment, sendBookingOTP } from "./src/server/actions" with { type: "ref" };
-import { getAppointments, getDashboardStats, getBarbers } from "./src/server/adminQueries" with { type: "ref" };
+import { getAppointments, getDashboardStats, getBarbers, getAppointmentById } from "./src/server/adminQueries" with { type: "ref" };
 import {
   updateAppointmentStatus,
   verifyPaymentStatus,
@@ -35,6 +41,13 @@ export default app({
   spec: [
     route("LandingRoute", "/", page(LandingPage)),
     route("LoginRoute", "/login", page(LoginPage)),
+    route("BookRoute", "/book", page(BookAppointmentPage)),
+    route("DashboardRoute", "/dashboard", page(DashboardPage, { authRequired: true })),
+    route("AppointmentDetailRoute", "/dashboard/appointment/:id", page(AppointmentDetailPage, { authRequired: true })),
+    route("ServicesRoute", "/dashboard/services", page(ServicesPage, { authRequired: true })),
+    route("BarbersRoute", "/dashboard/barbers", page(BarbersPage, { authRequired: true })),
+    route("SettingsRoute", "/dashboard/settings", page(SettingsPage, { authRequired: true })),
+
     query(getAvailableSlots, {
       entities: ["Appointment", "ShopSettings", "Service"],
       auth: false,
@@ -56,6 +69,10 @@ export default app({
     }),
     query(getBarbers, {
       entities: ["User"],
+      auth: true,
+    }),
+    query(getAppointmentById, {
+      entities: ["Appointment", "Service", "User"],
       auth: true,
     }),
     action(updateAppointmentStatus, {

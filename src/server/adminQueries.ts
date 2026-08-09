@@ -5,6 +5,7 @@ import type {
   GetAppointments,
   GetDashboardStats,
   GetBarbers,
+  GetAppointmentById,
 } from "wasp/server/operations";
 
 export type AppointmentWithRelations = Prisma.AppointmentGetPayload<{
@@ -124,6 +125,32 @@ export const getDashboardStats: GetDashboardStats<
     completedToday,
     totalRevenuePaise,
   };
+};
+
+export const getAppointmentById: GetAppointmentById<
+  { id: number },
+  AppointmentWithRelations | null
+> = async ({ id }, context) => {
+  if (!context.user) {
+    throw new HttpError(401, "Authentication required");
+  }
+
+  const appointment = await prisma.appointment.findUnique({
+    where: { id },
+    include: { service: true, assignedBarber: true },
+  });
+
+  if (!appointment) return null;
+
+  if (
+    context.user.role !== "ADMIN" &&
+    appointment.assignedBarberId !== context.user.id &&
+    appointment.assignedBarberId !== null
+  ) {
+    throw new HttpError(403, "Access denied");
+  }
+
+  return appointment;
 };
 
 export const getBarbers: GetBarbers<
