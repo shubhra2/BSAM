@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import './global.css';
 import { useQuery } from 'wasp/client/operations';
 import { getShopInfo, getServices } from 'wasp/client/operations';
 import { Link } from 'wasp/client/router';
@@ -101,10 +102,11 @@ export const LandingPage = () => {
         }}
       >
         <div
+          className="landing-nav-container"
           style={{
             pointerEvents: 'all',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            gap: '2rem',
+            gap: '1.5rem',
             padding: '0.625rem 0.75rem 0.625rem 1.25rem',
             borderRadius: '9999px',
             background: scrolled ? 'rgba(5,5,5,0.85)' : 'rgba(255,255,255,0.05)',
@@ -112,32 +114,36 @@ export const LandingPage = () => {
             WebkitBackdropFilter: 'blur(20px)',
             border: '1px solid rgba(255,255,255,0.08)',
             transition: 'background 600ms cubic-bezier(0.32,0.72,0,1)',
+            maxWidth: 'calc(100vw - 2rem)',
           }}
         >
-          <span style={{ fontWeight: 700, fontSize: '0.9rem', letterSpacing: '-0.01em', color: '#fff' }}>
+          <span style={{ fontWeight: 700, fontSize: '0.85rem', letterSpacing: '-0.01em', color: '#fff', whiteSpace: 'nowrap' }}>
             ✂ {shopName}
           </span>
-          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-            <a href="#services" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.02em', textDecoration: 'none' }}>
+          <div className="landing-nav-links" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <a href="#services" className="nav-hide-mobile" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.02em', textDecoration: 'none' }}>
               Services
             </a>
-            <a href="#info" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.02em', textDecoration: 'none' }}>
+            <a href="#info" className="nav-hide-mobile" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.02em', textDecoration: 'none' }}>
               Hours
             </a>
             <Link
               to="/login"
+              className="nav-hide-mobile"
               style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: 500, textDecoration: 'none' }}
             >
               Admin
             </Link>
             <Link
               to="/book"
+              className="book-btn"
               style={{
-                display: 'flex', alignItems: 'center', gap: '0.5rem',
-                padding: '0.5rem 1rem',
+                display: 'flex', alignItems: 'center', gap: '0.375rem',
+                padding: '0.45rem 0.875rem',
                 borderRadius: '9999px',
                 background: '#fff', color: '#050505',
                 fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none',
+                whiteSpace: 'nowrap',
                 transition: 'transform 300ms cubic-bezier(0.32,0.72,0,1)',
               }}
               onMouseEnter={e => (e.currentTarget.style.transform = 'scale(0.97)')}
@@ -145,10 +151,10 @@ export const LandingPage = () => {
             >
               Book Now
               <span style={{
-                width: '1.5rem', height: '1.5rem', borderRadius: '50%',
+                width: '1.25rem', height: '1.25rem', borderRadius: '50%',
                 background: 'rgba(0,0,0,0.08)',
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '0.75rem',
+                fontSize: '0.7rem',
                 transition: 'transform 300ms cubic-bezier(0.32,0.72,0,1)',
               }}>↗</span>
             </Link>
@@ -157,7 +163,7 @@ export const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '8rem 2rem 4rem', position: 'relative', zIndex: 1 }}>
+      <section className="hero-section" style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '8rem 2rem 4rem', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto', width: '100%' }}>
 
           {/* Eyebrow tag */}
@@ -181,7 +187,7 @@ export const LandingPage = () => {
           {/* Hero headline */}
           <div style={{ opacity: 0, animation: 'fadeUp 900ms cubic-bezier(0.32,0.72,0,1) 200ms forwards' }}>
             <h1 style={{
-              fontSize: 'clamp(3rem, 8vw, 7rem)',
+              fontSize: 'clamp(2.75rem, 8vw, 7rem)',
               fontWeight: 800,
               lineHeight: 1.0,
               letterSpacing: '-0.04em',
@@ -196,7 +202,7 @@ export const LandingPage = () => {
 
           <div style={{ opacity: 0, animation: 'fadeUp 900ms cubic-bezier(0.32,0.72,0,1) 350ms forwards', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
             <p style={{
-              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+              fontSize: 'clamp(0.95rem, 2.5vw, 1.25rem)',
               color: 'rgba(255,255,255,0.45)',
               margin: 0,
               maxWidth: '28rem',
@@ -205,15 +211,15 @@ export const LandingPage = () => {
               {shopInfo?.address || "Bengaluru's finest cuts, booked in under 60 seconds."}
             </p>
 
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginLeft: 'auto' }}>
+            <div className="hero-actions" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginLeft: 'auto' }}>
               <Link
                 to="/book"
                 style={{
                   display: 'flex', alignItems: 'center', gap: '0.625rem',
-                  padding: '0.875rem 1.75rem',
+                  padding: '0.875rem 1.5rem',
                   borderRadius: '9999px',
                   background: '#fff', color: '#050505',
-                  fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none',
+                  fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none',
                   transition: 'transform 300ms cubic-bezier(0.32,0.72,0,1), box-shadow 300ms cubic-bezier(0.32,0.72,0,1)',
                   boxShadow: '0 0 0 0 rgba(255,255,255,0)',
                 }}
@@ -238,12 +244,12 @@ export const LandingPage = () => {
                 href="#services"
                 style={{
                   display: 'flex', alignItems: 'center', gap: '0.625rem',
-                  padding: '0.875rem 1.75rem',
+                  padding: '0.875rem 1.5rem',
                   borderRadius: '9999px',
                   background: 'rgba(255,255,255,0.07)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   color: 'rgba(255,255,255,0.8)',
-                  fontWeight: 600, fontSize: '0.95rem', textDecoration: 'none',
+                  fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none',
                   transition: 'background 300ms cubic-bezier(0.32,0.72,0,1)',
                 }}
                 onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.12)')}
@@ -256,32 +262,47 @@ export const LandingPage = () => {
         </div>
 
         {/* Hero stats bar */}
-        <div style={{ opacity: 0, animation: 'fadeUp 900ms cubic-bezier(0.32,0.72,0,1) 500ms forwards', maxWidth: '72rem', margin: '5rem auto 0', width: '100%' }}>
+        <div style={{ opacity: 0, animation: 'fadeUp 900ms cubic-bezier(0.32,0.72,0,1) 500ms forwards', maxWidth: '72rem', margin: '4rem auto 0', width: '100%' }}>
           <div style={{
-            padding: '0.25rem',
+            padding: '0.2rem',
             borderRadius: '1.5rem',
             background: 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.06)',
           }}>
-            <div style={{
-              borderRadius: 'calc(1.5rem - 4px)',
-              background: 'rgba(255,255,255,0.02)',
-              boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)',
-              padding: '1.5rem 2rem',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '1rem',
-            }}>
+            <div
+              className="hero-stats-grid"
+              style={{
+                borderRadius: 'calc(1.5rem - 3px)',
+                background: 'rgba(255,255,255,0.02)',
+                boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05)',
+                padding: '1.25rem 1.5rem',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '0.75rem',
+              }}
+            >
               {[
                 { val: shopInfo?.openTime || '09:00', label: 'Opens' },
                 { val: shopInfo?.closeTime || '20:00', label: 'Closes' },
-                { val: shopInfo?.phone || '+91 98765 43210', label: 'Call us' },
+                { val: shopInfo?.phone || '+91 9876543210', label: 'Call us' },
               ].map((stat, i) => (
-                <div key={i} style={{ textAlign: 'center', padding: '0.5rem' }}>
-                  <div style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.03em', color: '#fff', marginBottom: '0.25rem' }}>
+                <div key={i} style={{ textAlign: 'center', padding: '0.25rem', overflow: 'hidden' }}>
+                  <div
+                    className="hero-stats-val"
+                    style={{
+                      fontSize: 'clamp(0.85rem, 3vw, 1.25rem)',
+                      fontWeight: 700,
+                      letterSpacing: '-0.02em',
+                      color: '#fff',
+                      marginBottom: '0.25rem',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                    }}
+                  >
                     {stat.val}
                   </div>
-                  <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 500 }}>
+                  <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 500 }}>
                     {stat.label}
                   </div>
                 </div>
@@ -292,7 +313,7 @@ export const LandingPage = () => {
       </section>
 
       {/* Services Section */}
-      <section id="services" style={{ padding: '8rem 2rem', position: 'relative', zIndex: 1 }}>
+      <section id="services" style={{ padding: '6rem 1.5rem', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <RevealSection>
             <div style={{ marginBottom: '0.75rem' }}>
@@ -317,24 +338,27 @@ export const LandingPage = () => {
             }}>
               What we offer
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '1rem', marginBottom: '3rem', maxWidth: '30rem' }}>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '1rem', marginBottom: '2.5rem', maxWidth: '30rem' }}>
               From quick trims to full grooming sessions — priced fairly, done precisely.
             </p>
           </RevealSection>
 
           {/* Asymmetrical Bento grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(12, 1fr)',
-            gap: '1rem',
-          }}>
+          <div
+            className="bento-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(12, 1fr)',
+              gap: '1rem',
+            }}
+          >
             {(services || []).map((service, i) => {
               const isLarge = i === 0;
               return (
                 <RevealSection
                   key={service.id}
                   delay={i * 120}
-                  className=""
+                  className="bento-card"
                   style={{
                     gridColumn: isLarge ? 'span 7' : 'span 5',
                     gridRow: isLarge ? 'span 1' : undefined,
@@ -361,11 +385,12 @@ export const LandingPage = () => {
                           <img
                             src={service.imageUrl}
                             alt={service.name}
+                            onError={e => { (e.currentTarget as HTMLImageElement).src = "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=600&auto=format&fit=crop"; }}
                             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                           />
                         </div>
                       )}
-                      <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                      <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                         <div>
                           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 0.4rem' }}>
                             {service.name}
@@ -377,12 +402,12 @@ export const LandingPage = () => {
                           )}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-                          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                            <span style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.03em' }}>
+                          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                            <span style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.03em' }}>
                               {formatPrice(service.price)}
                             </span>
                             <span style={{
-                              padding: '0.2rem 0.6rem', borderRadius: '9999px',
+                              padding: '0.2rem 0.5rem', borderRadius: '9999px',
                               background: 'rgba(255,255,255,0.06)',
                               fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)',
                               fontWeight: 500,
@@ -394,7 +419,7 @@ export const LandingPage = () => {
                             to="/book"
                             style={{
                               display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                              padding: '0.5rem 1rem',
+                              padding: '0.45rem 0.875rem',
                               borderRadius: '9999px',
                               background: 'rgba(255,255,255,0.1)',
                               border: '1px solid rgba(255,255,255,0.12)',
@@ -420,12 +445,12 @@ export const LandingPage = () => {
       </section>
 
       {/* Shop Info Section */}
-      <section id="info" style={{ padding: '6rem 2rem 10rem', position: 'relative', zIndex: 1 }}>
+      <section id="info" style={{ padding: '4rem 1.5rem 8rem', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto' }}>
           <div style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: '2rem',
+            gap: '1.5rem',
           }}>
             {/* Hours card */}
             <RevealSection>
@@ -439,26 +464,26 @@ export const LandingPage = () => {
                   borderRadius: 'calc(1.75rem - 4px)',
                   background: 'rgba(10,10,10,0.95)',
                   boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)',
-                  padding: '2rem',
+                  padding: '1.5rem',
                 }}>
                   <span style={{
-                    display: 'inline-block', marginBottom: '1.25rem',
+                    display: 'inline-block', marginBottom: '1rem',
                     padding: '0.3rem 0.75rem', borderRadius: '9999px',
                     border: '1px solid rgba(255,255,255,0.1)',
                     fontSize: '0.65rem', fontWeight: 600,
                     letterSpacing: '0.15em', textTransform: 'uppercase',
                     color: 'rgba(255,255,255,0.5)',
                   }}>Hours</span>
-                  <h3 style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: '1.25rem' }}>
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: '1rem' }}>
                     When we're open
                   </h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     {DAYS.map(day => {
                       const isClosed = closedDays.includes(day);
                       return (
                         <div key={day} style={{
                           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                          padding: '0.625rem 0',
+                          padding: '0.5rem 0',
                           borderBottom: '1px solid rgba(255,255,255,0.04)',
                         }}>
                           <span style={{ fontSize: '0.85rem', color: isClosed ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.7)', fontWeight: 500 }}>
@@ -491,20 +516,20 @@ export const LandingPage = () => {
                     borderRadius: 'calc(1.75rem - 4px)',
                     background: 'rgba(10,10,10,0.95)',
                     boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.06)',
-                    padding: '2rem',
+                    padding: '1.5rem',
                   }}>
                     <span style={{
-                      display: 'inline-block', marginBottom: '1rem',
+                      display: 'inline-block', marginBottom: '0.75rem',
                       padding: '0.3rem 0.75rem', borderRadius: '9999px',
                       border: '1px solid rgba(255,255,255,0.1)',
                       fontSize: '0.65rem', fontWeight: 600,
                       letterSpacing: '0.15em', textTransform: 'uppercase',
                       color: 'rgba(255,255,255,0.5)',
                     }}>Find us</span>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '0.5rem' }}>
                       Location
                     </h3>
-                    <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+                    <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: '1rem' }}>
                       {shopInfo?.address || 'HSR Layout, Bengaluru'}
                     </p>
                     {shopInfo?.address && (
@@ -514,7 +539,7 @@ export const LandingPage = () => {
                         rel="noreferrer"
                         style={{
                           display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                          padding: '0.5rem 1rem', borderRadius: '9999px',
+                          padding: '0.45rem 0.875rem', borderRadius: '9999px',
                           background: 'rgba(255,255,255,0.07)',
                           border: '1px solid rgba(255,255,255,0.1)',
                           color: 'rgba(255,255,255,0.7)',
@@ -529,7 +554,7 @@ export const LandingPage = () => {
                         <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)' }}>Call:</span>
                         <a
                           href={`tel:${shopInfo.phone}`}
-                          style={{ fontSize: '0.9rem', fontWeight: 700, color: '#fff', textDecoration: 'none' }}
+                          style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff', textDecoration: 'none' }}
                         >
                           {shopInfo.phone}
                         </a>
@@ -551,37 +576,37 @@ export const LandingPage = () => {
                     borderRadius: 'calc(1.75rem - 4px)',
                     background: 'linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(16,185,129,0.08) 100%)',
                     boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)',
-                    padding: '2.5rem',
+                    padding: '2rem 1.5rem',
                     textAlign: 'center',
                   }}>
-                    <p style={{ fontSize: '0.7rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginBottom: '0.75rem' }}>
+                    <p style={{ fontSize: '0.65rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginBottom: '0.5rem' }}>
                       Ready?
                     </p>
-                    <h3 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.04em', marginBottom: '0.5rem' }}>
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.04em', marginBottom: '0.5rem' }}>
                       Book in 60 sec.
                     </h3>
-                    <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.45)', marginBottom: '1.5rem' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.45)', marginBottom: '1.25rem' }}>
                       No account needed. Just your name & phone.
                     </p>
                     <Link
                       to="/book"
                       style={{
-                        display: 'inline-flex', alignItems: 'center', gap: '0.625rem',
-                        padding: '0.875rem 2rem',
+                        display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                        padding: '0.75rem 1.5rem',
                         borderRadius: '9999px',
                         background: '#fff', color: '#050505',
-                        fontWeight: 700, fontSize: '1rem', textDecoration: 'none',
+                        fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none',
                         transition: 'transform 300ms cubic-bezier(0.32,0.72,0,1)',
                       }}
                       onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.transform = 'scale(0.97)')}
                       onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1)')}
                     >
-                      Book Your Appointment
+                      Book Appointment
                       <span style={{
-                        width: '1.75rem', height: '1.75rem', borderRadius: '50%',
+                        width: '1.5rem', height: '1.5rem', borderRadius: '50%',
                         background: 'rgba(0,0,0,0.08)',
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '0.85rem',
+                        fontSize: '0.75rem',
                       }}>↗</span>
                     </Link>
                   </div>
@@ -594,7 +619,7 @@ export const LandingPage = () => {
 
       {/* Footer */}
       <footer style={{
-        padding: '2rem',
+        padding: '2rem 1.5rem',
         borderTop: '1px solid rgba(255,255,255,0.05)',
         zIndex: 1, position: 'relative',
       }}>
@@ -607,14 +632,33 @@ export const LandingPage = () => {
       </footer>
 
       <style>{`
+        *, *::before, *::after {
+          box-sizing: border-box;
+        }
+        html, body, #root {
+          margin: 0 !important;
+          padding: 0 !important;
+          background-color: #050505 !important;
+          color: #ffffff;
+          min-height: 100vh;
+          min-height: 100dvh;
+          overflow-x: hidden;
+          border: none !important;
+          outline: none !important;
+        }
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(40px); filter: blur(4px); }
           to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
         @media (max-width: 768px) {
-          #services > div > div:last-child { grid-template-columns: 1fr !important; }
+          .nav-hide-mobile { display: none !important; }
+          .hero-section { padding: 6rem 1.25rem 3rem !important; }
+          .hero-actions { width: 100% !important; margin-left: 0 !important; margin-top: 1rem !important; flex-direction: column !important; }
+          .hero-actions > a { width: 100% !important; justify-content: center !important; }
+          .hero-stats-grid { padding: 1rem 0.75rem !important; gap: 0.25rem !important; }
+          .hero-stats-val { font-size: 0.9rem !important; }
+          .bento-card { grid-column: span 12 !important; }
           #info > div > div { grid-template-columns: 1fr !important; }
-          nav > div > div > a:not(:last-child):not(:first-child) { display: none; }
         }
       `}</style>
     </div>

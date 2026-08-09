@@ -88,7 +88,7 @@ export const seedFn: DbSeedFn = async (prisma) => {
         name: "Haircut + Beard Trim",
         description: "Signature haircut paired with sharp beard shaping.",
         imageUrl:
-          "https://images.unsplash.com/photo-1599351431202-180f0b22f462?w=400",
+          "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=600&auto=format&fit=crop",
         durationMinutes: 60,
         price: 40000,
         tokenAmount: 10000,

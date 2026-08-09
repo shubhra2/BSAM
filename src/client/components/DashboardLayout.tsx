@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../global.css';
 import { Link as WaspLink } from 'wasp/client/router';
 import { Link, useLocation } from 'react-router';
 import { useAuth, logout } from 'wasp/client/auth';
@@ -54,10 +55,13 @@ export function DashboardLayout({ children, title }: { children: React.ReactNode
       )}
 
       {/* Sidebar */}
-      <aside style={{
-        ...sidebarStyle,
-        transform: sidebarOpen ? 'translateX(0)' : undefined,
-      }}>
+      <aside
+        className="dashboard-sidebar"
+        style={{
+          ...sidebarStyle,
+          transform: sidebarOpen ? 'translateX(0)' : undefined,
+        }}
+      >
         {/* Logo */}
         <div style={{ padding: '1.5rem 1.25rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
           <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
@@ -77,6 +81,7 @@ export function DashboardLayout({ children, title }: { children: React.ReactNode
               <Link
                 key={item.path}
                 to={item.path as any}
+                onClick={() => setSidebarOpen(false)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '0.75rem',
                   padding: '0.625rem 0.875rem',
@@ -141,19 +146,34 @@ export function DashboardLayout({ children, title }: { children: React.ReactNode
       </aside>
 
       {/* Main content */}
-      <div style={{ flex: 1, marginLeft: '16rem', display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
+      <div className="dashboard-main" style={{ flex: 1, marginLeft: '16rem', display: 'flex', flexDirection: 'column', minHeight: '100dvh', minWidth: 0 }}>
         {/* Top bar */}
         <header style={{
-          padding: '1rem 2rem',
+          padding: '1rem 1.5rem',
           borderBottom: '1px solid rgba(255,255,255,0.05)',
           background: 'rgba(5,5,5,0.8)',
           backdropFilter: 'blur(20px)',
           position: 'sticky', top: 0, zIndex: 30,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <h1 style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.025em', margin: 0 }}>
-            {title || 'Dashboard'}
-          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
+            <button
+              className="dashboard-menu-btn"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                color: '#fff', borderRadius: '0.5rem',
+                padding: '0.4rem 0.6rem', fontSize: '1rem',
+                cursor: 'pointer', display: 'none',
+              }}
+            >
+              ☰
+            </button>
+            <h1 style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.025em', margin: 0 }}>
+              {title || 'Dashboard'}
+            </h1>
+          </div>
           <Link
             to="/book"
             style={{
@@ -170,15 +190,28 @@ export function DashboardLayout({ children, title }: { children: React.ReactNode
           </Link>
         </header>
 
-        <main style={{ flex: 1, padding: '2rem' }}>
+        <main style={{ flex: 1, padding: '1.5rem' }}>
           {children}
         </main>
       </div>
 
       <style>{`
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body, #root {
+          margin: 0 !important;
+          padding: 0 !important;
+          background-color: #050505 !important;
+          color: #ffffff;
+          min-height: 100vh;
+          min-height: 100dvh;
+          overflow-x: hidden;
+          border: none !important;
+          outline: none !important;
+        }
         @media (max-width: 768px) {
-          .dashboard-sidebar { transform: translateX(-100%); }
+          .dashboard-sidebar { transform: ${sidebarOpen ? 'translateX(0)' : 'translateX(-100%)'}; }
           .dashboard-main { margin-left: 0 !important; }
+          .dashboard-menu-btn { display: inline-block !important; }
         }
       `}</style>
     </div>

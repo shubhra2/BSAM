@@ -8,9 +8,9 @@ const formatPrice = (paise: number) => `₹${(paise / 100).toFixed(0)}`;
 
 const UNSPLASH_IMAGES = [
   'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400',
-  'https://images.unsplash.com/photo-1599351431202-180f0b22f462?w=400',
-  'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400',
   'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400',
+  'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400',
+  'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400',
 ];
 
 const SERVICE_FORM_FIELDS = [
